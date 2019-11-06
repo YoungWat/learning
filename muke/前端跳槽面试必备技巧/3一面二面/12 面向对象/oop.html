@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 类的声明
+        function Animal(){
+            this.name = "name";
+        }
+
+        // es6中的声明
+        class Animal2{
+            constructor(){
+                this.name = name;
+            }
+        }
+
+        // 实例化
+        console.log(new Animal(),new Animal2());
+
+        // 1、借助构造函数实现继承
+        function Parent1(){
+            this.name = "parent1";
+        }
+        Parent1.prototype.say = function(){console.log("say p");}
+        function Child1(){
+            Parent1.call(this);//改变函数运行上下文
+            this.type = "child1";
+        }
+
+        console.log(new Child1());
+        //缺点 Parent1.prototype上的方法不可继承
+
+        // 2、借助原型链实现继承
+        function Parent2(){
+            this.name = "parent2";
+            this.play = [1,2,3];
+        }
+        function Child2(){
+            this.type = "child2";
+        }
+        Child2.prototype = new Parent2();
+        console.log(new Child2());
+        //缺点 原型对象共用
+
+        // 3、组合方式
+        function Parent3(){
+            this.name = "parent3";
+            this.play = [1,2,3];
+        }
+        function Child3(){
+            Parent3.call(this);
+            this.type = "child3";
+        }
+        Child3.prototype = new Parent3();
+        var s3 = new Child3();
+        var s4 = new Child3();
+        s3.play.push(4);
+        console.log(s3.play,s4.play);
+        
+        //3、 组合继承优化1 
+        function Parent4(){
+            this.name = "parent4";
+            this.play = [1,2,3];
+        }
+        function Child4(){
+            Parent4.call(this);
+            this.type = "child4";
+        }
+        Child4.prototype = Parent4.prototype;
+        var s5 = new Child4();
+        var s6 = new Child4();
+        s5.play.push(4);
+        console.log(s5,s6);
+
+        console.log(s5 instanceof Child4,s5 instanceof Parent4);
+        console.log(s5.constructor);
+
+        //3、 组合继承优化2
+        function Parent5(){
+            this.name = "parent5";
+            this.play = [1,2,3];
+        }
+        function Child5(){
+            Parent5.call(this);
+            this.type = "child5";
+        }
+        Child5.prototype = Object.create(Parent5.prototype);//创建一个中间对象
+        Child5.prototype.constructor = Child5;
+
+        var s7 = new Child5();
+
+    </script>
+</body>
+</html>
